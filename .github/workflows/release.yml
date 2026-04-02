@@ -269,8 +269,12 @@ jobs:
           unzip "$cpu_zip" -d "$cpu_tmp"
 
           for hip_zip in artifact/llama-bin-win-hip-*-x64.zip; do
+            if [[ "$hip_zip" == "$cpu_zip" ]]; then
+                  continue
+            
             echo "Processing $(basename "$hip_zip")"
-
+            fi
+            
             tmp_dir=$(mktemp -d)
             unzip "$hip_zip" -d "$tmp_dir"
 
