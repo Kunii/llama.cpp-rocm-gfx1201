@@ -65,14 +65,13 @@ jobs:
       HIPSDK_INSTALLER_VERSION: "26.Q1"
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       ROCM_CMAKE_ARGS: ${{ github.event.inputs.rocm_cmake_args || '-DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_TOOLS=ON -DLLAMA_BUILD_SERVER=ON -DGGML_RPC=ON' }}
-      GFX_TARGETS: ${{ github.event.inputs.gfx_target || 'gfx1201' }}
       ROCM_VERSION: ${{ github.event.inputs.rocm_version || 'latest' }}
 
     strategy:
       matrix:
         include:
           - name: "radeon"
-            gpu_targets: ${{ env.GFX_TARGETS }}
+            gpu_targets: ${{ github.event.inputs.gfx_target || 'gfx1201' }}
 
     steps:
       - name: Clone
