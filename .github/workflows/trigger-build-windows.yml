@@ -138,8 +138,9 @@ jobs:
           done
 
           echo "Moving other artifacts..."
-          mv -v artifact/*.zip release
-          mv -v artifact/*.tar.gz release
+          for f in artifact/*.zip artifact/*.tar.gz; do
+              [ -e "$f" ] && mv -v "$f" release/
+          done
 
       - name: Create release
         id: create_release
