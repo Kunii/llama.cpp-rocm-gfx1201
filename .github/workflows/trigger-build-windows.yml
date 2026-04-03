@@ -1,0 +1,26 @@
+name: Windows CPU Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      arch:
+        description: 'Architecture to build for (x64)'
+        required: true
+        type: choice
+        options:
+          - x64
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  CMAKE_ARGS: "-DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_TOOLS=ON -DLLAMA_BUILD_SERVER=ON -DGGML_RPC=ON"
+
+jobs:
+  call-build-cpu:
+    uses: ./.github/workflows/trigger-build-windows-cpu2.yml
+    with:
+      arch: ${{ inputs.arch }}
+    secrets: inherit
