@@ -70,9 +70,9 @@ jobs:
     uses: ./.github/workflows/trigger-build-windows-rocm.yml
     with:
       arch: ${{ inputs.arch }}
-      gfx_target: ${{ env.GFX_TARGETS }}
-      rocm_version: ${{ env.ROCM_VERSION }}
-      rocm_cmake_args: ${{ env.ROCM_CMAKE_ARGS }}
+      gfx_target: ${{ env:GFX_TARGETS }}
+      rocm_version: ${{ env:ROCM_VERSION }}
+      rocm_cmake_args: ${{ env:ROCM_CMAKE_ARGS }}
     secrets: inherit
 
   release:

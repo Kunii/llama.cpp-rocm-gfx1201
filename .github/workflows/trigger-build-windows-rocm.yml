@@ -74,7 +74,7 @@ jobs:
       matrix:
         include:
           - name: "radeon"
-            gpu_targets: ${{ env:GFX_TARGETS }}
+            gpu_targets: ${{ env.GFX_TARGETS }}
 
     steps:
       - name: Clone
@@ -99,7 +99,7 @@ jobs:
         if: steps.cache-rocm.outputs.cache-hit != 'true'
         uses: ./.github/actions/windows-setup-rocm
         with:
-          version: ${{ env:HIPSDK_INSTALLER_VERSION }}
+          version: ${{ env.HIPSDK_INSTALLER_VERSION }}
 
       - name: Verify ROCm
         id: verify
@@ -115,7 +115,7 @@ jobs:
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.21
         with:
-          key: windows-latest-hip-${{ env:HIPSDK_INSTALLER_VERSION }}-${{ matrix.name }}-x64
+          key: windows-latest-hip-${{ env.HIPSDK_INSTALLER_VERSION }}-${{ matrix.name }}-x64
           evict-old-files: 1d
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
@@ -137,7 +137,7 @@ jobs:
             -DGGML_HIP=ON `
             -DROCM_DIR="${env:HIP_PATH}" `
             -DLLAMA_BUILD_BORINGSSL=ON `
-            ${{ env:ROCM_CMAKE_ARGS }}
+            ${{ env.ROCM_CMAKE_ARGS }}
           cmake --build build --target ggml-hip -j ${env:NUMBER_OF_PROCESSORS}
           md "build\bin\rocblas\library\"
           md "build\bin\hipblaslt\library"
