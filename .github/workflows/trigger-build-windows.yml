@@ -1,4 +1,4 @@
-name: Windows CPU Build
+name: Build All Windows
 
 on:
   workflow_dispatch:
