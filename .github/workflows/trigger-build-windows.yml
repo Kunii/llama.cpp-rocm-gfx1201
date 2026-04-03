@@ -52,27 +52,24 @@ concurrency:
 
 env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  ROCM_CMAKE_ARGS: ${{ github.event.inputs.rocm_cmake_args || '-DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_TOOLS=ON -DLLAMA_BUILD_SERVER=ON -DGGML_RPC=ON' }}
-  GFX_TARGETS: ${{ github.event.inputs.gfx_target || 'gfx1201' }}
-  ROCM_VERSION: ${{ github.event.inputs.rocm_version || 'latest' }}
 
 jobs:
   build-cmake-pkg:
     uses: ./.github/workflows/build-cmake-pkg.yml
-  
+
   build-cpu:
     uses: ./.github/workflows/trigger-build-windows-cpu.yml
     with:
       arch: ${{ inputs.arch }}
     secrets: inherit
-  
+
   build-rocm:
     uses: ./.github/workflows/trigger-build-windows-rocm.yml
     with:
       arch: ${{ inputs.arch }}
-      gfx_target: ${{ env:GFX_TARGETS }}
-      rocm_version: ${{ env:ROCM_VERSION }}
-      rocm_cmake_args: ${{ env:ROCM_CMAKE_ARGS }}
+      gfx_target: ${{ inputs.gfx_target || 'gfx1201' }}
+      rocm_version: ${{ inputs.rocm_version || 'latest' }}
+      rocm_cmake_args: ${{ inputs.rocm_cmake_args || '-DLLAMA_BUILD_EXAMPLES=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_TOOLS=ON -DLLAMA_BUILD_SERVER=ON -DGGML_RPC=ON' }}
     secrets: inherit
 
   release:
