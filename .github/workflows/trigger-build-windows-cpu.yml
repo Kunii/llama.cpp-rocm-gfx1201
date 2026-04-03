@@ -18,7 +18,11 @@ jobs:
   trigger-build:
     runs-on: windows-2022
     steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v6
+
       - name: Trigger Windows CPU Build Workflow
-        usus: ./.github/actions/build-windows-cpu
+        uses: ./.github/actions/build-windows-cpu
         with:
           inputs: '{ "arch": "${{ github.event.inputs.arch }}" }'
