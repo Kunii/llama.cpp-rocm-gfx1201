@@ -54,9 +54,6 @@ env:
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  build-cmake-pkg:
-    uses: ./.github/workflows/build-cmake-pkg.yml
-
   build-cpu:
     uses: ./.github/workflows/trigger-build-windows-cpu.yml
     with:
