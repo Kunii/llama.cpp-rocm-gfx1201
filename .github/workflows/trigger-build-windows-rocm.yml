@@ -90,7 +90,16 @@ jobs:
         uses: actions/cache@v5
         with:
           path: C:\Program Files\AMD\ROCm
-          key: rocm-${{ env.HIPSDK_INSTALLER_VERSION }}-${{ runner.os }}
+          key: rocm-${{ env.HIPSDK_INSTALLER_VERSION }}-${{ runner.os }}-${{ runner.arch }}
+
+      - name: Cache check
+        shell: pwsh
+        run: |
+          if ("${{ steps.cache-rocm.outputs.cache-hit }}" -eq "true") {
+            Write-Host "Got ROCm cache hit"
+          } else {
+            Write-Host "Got ROCm cache miss"
+          }
 
       - name: Setup ROCm
         if: steps.cache-rocm.outputs.cache-hit != 'true'
@@ -112,9 +121,9 @@ jobs:
       - name: ccache
         uses: ggml-org/ccache-action@v1.2.21
         with:
-          key: windows-latest-hip-${{ env.HIPSDK_INSTALLER_VERSION }}-${{ matrix.name }}-x64
+          key: ${{ runner.os }}-${{ runner.arch }}-hip-${{ env.HIPSDK_INSTALLER_VERSION }}-${{ matrix.name }}
           evict-old-files: 1d
-          save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          # save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
       - name: Build
         id: cmake_build
